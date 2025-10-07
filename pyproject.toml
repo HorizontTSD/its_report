@@ -15,7 +15,6 @@ dependencies = [
     "streamlit-extras==0.4.0",
     "tenacity==8.2.3",
     "urllib3==1.26.18",
-    "streamlit-authenticator>=0.3.2",
     "st-pages>=0.4.5",
     "tox-pdm==0.7.2",
     "ipywidgets>=8.1.2",
@@ -26,6 +25,7 @@ dependencies = [
     "streamlit-lottie>=0.0.5",
     "streamlit>=1.35.0",
     "extra-streamlit-components>=0.1.71",
+    "streamlit-authenticator==0.3.2",
 ]
 requires-python = ">=3.10"
 readme = "README.md"

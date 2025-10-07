@@ -10,14 +10,22 @@ def authorization():
     with open(path_to_yaml) as file:
         config = yaml.load(file, Loader=SafeLoader)
 
+    # authenticator = stauth.Authenticate(
+    #     credentials=config["credentials"],
+    #     cookie_name=config["cookie"]["name"],
+    #     cookie_key=config["cookie"]["key"],
+    #     # cookie_name='',
+    #     # cookie_key='',
+    #     cookie_expiry_days=config["cookie"]["expiry_days"],
+    #     pre_authorized=config["preauthorized"],
+    # )
+
     authenticator = stauth.Authenticate(
-        credentials=config["credentials"],
-        cookie_name=config["cookie"]["name"],
-        cookie_key=config["cookie"]["key"],
-        # cookie_name='',
-        # cookie_key='',
-        cookie_expiry_days=config["cookie"]["expiry_days"],
-        pre_authorized=config["preauthorized"],
+        config['credentials'],
+        config['cookie']['name'],
+        config['cookie']['key'],
+        config['cookie']['expiry_days'],
+        # config['preauthorized']
     )
 
     return authenticator
