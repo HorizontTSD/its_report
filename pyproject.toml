@@ -1,0 +1,56 @@
+[project]
+name = "tool"
+version = "0.1.0"
+description = "Tools for analysis time series data"
+authors = [
+    {name = "Nikita Savvin", email = "savvin.nikit@yandex.ru"},
+]
+
+dependencies = [
+    "numpy==1.26.4",
+    "pandas==2.2.1",
+    "plotly==5.20.0",
+    "python-dotenv==1.0.1",
+    "Requests==2.31.0",
+    "streamlit-extras==0.4.0",
+    "tenacity==8.2.3",
+    "urllib3==1.26.18",
+    "streamlit-authenticator>=0.3.2",
+    "st-pages>=0.4.5",
+    "tox-pdm==0.7.2",
+    "ipywidgets>=8.1.2",
+    "streamlit-image-coordinates>=0.1.6",
+    "lxml>=5.2.2",
+    "beautifulsoup4>=4.12.3",
+    "hydralit-components>=1.0.10",
+    "streamlit-lottie>=0.0.5",
+    "streamlit>=1.35.0",
+    "extra-streamlit-components>=0.1.71",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.build]
+package-dir = "src"
+
+
+[tool.pytest.ini_options]
+disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true
+addopts = [
+    "--import-mode=importlib",
+]
+testpaths = [
+    "tests"
+]
+timeout = 300
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]

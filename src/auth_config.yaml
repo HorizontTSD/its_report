@@ -1,0 +1,13 @@
+credentials:
+  usernames:
+    admin: # Login - admin
+      email: fake_nsavvin@fake.com
+      name: admin
+      password: $2b$12$H0mADwwMuHC0ABfrXYj35eyaSarA72i.3PjfIzwYooS5f.C8FxANC # password - admin
+cookie:
+  expiry_days: 30
+  key: random_signature_key
+  name: random_cookie_name
+preauthorized:
+  emails:
+  - melsby@gmail.com
