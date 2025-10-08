@@ -26,6 +26,9 @@ dependencies = [
     "streamlit>=1.35.0",
     "extra-streamlit-components>=0.1.71",
     "streamlit-authenticator==0.3.2",
+    "openpyxl>=3.1.5",
+    "scikit-learn>=1.7.2",
+    "tqdm>=4.67.1",
 ]
 requires-python = ">=3.10"
 readme = "README.md"
