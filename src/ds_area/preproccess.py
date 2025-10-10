@@ -1,6 +1,10 @@
 import os
 import pandas as pd
 from collections import defaultdict
+import requests
+from datetime import datetime, timezone
+from typing import List, Dict
+
 
 home_path = os.getcwd()
 init_data_path = os.path.join(home_path, "src", "init_data")
@@ -100,6 +104,139 @@ for k, df in result.items():
 
         result[k] = df
 
+# Преобразуем колонку в тип datetime
+df[time_col] = pd.to_datetime(df[time_col])
+
+# Разделяем на компоненты
+df['year'] = df[time_col].dt.year
+df['month'] = df[time_col].dt.month
+df['day'] = df[time_col].dt.day
+
+#Добавление данных по погоде
+def fetch_realmeteo_year(city_slug: str, station_num: int, year: int, *,
+                         session: requests.Session = None,
+                         headers: Dict[str, str] = None) -> dict:
+    """Скачивает JSON архива за год с realmeteo.ru"""
+    url = f"https://realmeteo.ru/{city_slug}/{station_num}/history/{year}.json"
+    _headers = {
+        "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                       "AppleWebKit/537.36 (KHTML, like Gecko) "
+                       "Chrome/122 Safari/537.36"),
+        "Referer": f"https://realmeteo.ru/{city_slug}/{station_num}/history",
+        "Accept": "application/json,text/plain,*/*",
+    }
+    if headers:
+        _headers.update(headers)
+    sess = session or requests.Session()
+    r = sess.get(url, headers=_headers, timeout=30)
+    r.raise_for_status()
+    return r.json()
+
+def history_json_to_df(j: dict, tz_local: str = "Europe/Samara") -> pd.DataFrame:
+    """
+    Превращает годовой JSON в DataFrame c 30-минутной частотой.
+    Колонки равны ключам из j['data'].
+    Добавляет datetime(локальный) и date(локальный).
+    """
+    # В JSON: stop (секунды), interval (мс), data: {series: [..]}
+    stop_s = int(j["stop"])
+    interval_ms = int(j["interval"])
+    step = pd.to_timedelta(interval_ms, unit="ms")
+    # длину берём по любому доступному ряду
+    any_key = next(k for k, v in j["data"].items() if isinstance(v, list))
+    n = len(j["data"][any_key])
+
+    # start = stop - (n-1)*interval, шкала в UTC
+    start_utc = pd.to_datetime(stop_s, unit="s", utc=True) - step * (n - 1)
+    dt_utc = pd.date_range(start=start_utc, periods=n, freq=step, tz="UTC")
+
+    # в локальную зону метеостанции (Ижевск фактически +4)
+    dt_local = dt_utc.tz_convert(tz_local)
+
+    df = pd.DataFrame({"datetime": dt_local})
+    # перенесём ряды
+    for k, arr in j["data"].items():
+        if isinstance(arr, list) and len(arr) == n:
+            df[k] = arr
+
+    df["date"] = df["datetime"].dt.date  # локальная дата
+    return df
+
+def get_realmeteo_daily(city_slug: str = "izhevsk",
+                        station_num: int = 1,
+                        years: List[int] = list(range(2020, 2026)),
+                        tz_local: str = "Europe/Samara") -> pd.DataFrame:
+    """
+    Скачивает годы, конкатенирует 30-минутные данные, агрегирует по дням в фичи.
+    Возвращает датафрейм с колонкой date и дневными признаками.
+    """
+    sess = requests.Session()
+    parts = []
+    for y in years:
+        j = fetch_realmeteo_year(city_slug, station_num, y, session=sess)
+        parts.append(history_json_to_df(j, tz_local=tz_local))
+    halfhour = pd.concat(parts, ignore_index=True).sort_values("datetime")
+
+    agg_map = {}
+    if "temperature" in halfhour.columns:
+        agg_map["temperature"] = "mean"          # среднесуточная t
+    if "pressure" in halfhour.columns:
+        agg_map["pressure"] = "mean"
+    if "humidity" in halfhour.columns:
+        agg_map["humidity"] = "mean"
+    if "wind_speed_avg" in halfhour.columns:
+        agg_map["wind_speed_avg"] = ["mean", "max"]
+    if "wind_speed_hi" in halfhour.columns:
+        agg_map["wind_speed_hi"] = "max"         # максимум порывов
+    if "solar_rad" in halfhour.columns:
+        agg_map["solar_rad"] = "sum"             # суммарная радиация за день
+    if "uv" in halfhour.columns:
+        agg_map["uv"] = "max"                    # дневной максимум
+    if "pcp" in halfhour.columns:
+        agg_map["pcp"] = "sum"                   # суммарные осадки за день (мм)
+
+    if not agg_map:
+        raise ValueError("В ответе нет распознанных погодных рядов.")
+
+    daily = (
+        halfhour
+        .groupby("date", as_index=False)
+        .agg(agg_map)
+    )
+
+    daily.columns = [
+        "date" if c[0] == "date" else
+        c[0] if isinstance(c, str) else
+        (f"{c[0]}_{c[1]}")
+        for c in daily.columns
+    ]
+    return daily
+
+df['date'] = pd.to_datetime(df['По дням']).dt.date
+
+# Скачиваем и готовим погодные фичи:
+daily_weather = get_realmeteo_daily(
+    city_slug="izhevsk", station_num=1, years=list(range(2020, 2026)),
+    tz_local="Europe/Samara")
+
+# Джоин:
+df= df.merge(daily_weather, on="date", how="left")
+
+# One‑hot энкодинг
+def one_hot_encode(df: pd.DataFrame, cat_col: str) -> pd.DataFrame:
+    """One‑hot (dummy) encode a categorical column"""
+    return pd.get_dummies(df, columns=[cat_col], prefix=cat_col)
+
+# Label энкодинг
+def label_encode(df: pd.DataFrame, cat_col: str) -> pd.DataFrame:
+    """Label-encode a categorical column into integer codes, keeping the original."""
+    df_copy = df.copy()
+    df_copy[f"{cat_col}_encoded"], uniques = pd.factorize(df_copy[cat_col], sort=True)
+    return df_copy
+
+# Пример вызова функции 
+# df = one_hot_encode(df, 'year') добавляет колонки year_2020, year_2021, year_2022	и т.д.
+# df = label_encode(df, 'year') добавляет колонку year_encoded
 
 for k, df in result.items():
     path = os.path.join(preprocess_data_path, f"{k}.csv")
