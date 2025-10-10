@@ -1,0 +1,71 @@
+============================================================
+ОТЧЁТ ПО ГЕНЕРАЦИИ ПРИЗНАКОВ (FEATURE ENGINEERING)
+============================================================
+Дата и время запуска: 2025-10-10 20:49:51
+Папка с исходными данными: /root/horizon/its_report/src/preprocess_data/cleaned
+Папка с результатами: /root/horizon/its_report/src/preprocess_data/features
+
+ УСПЕШНО ОБРАБОТАНЫЕ ДАТАСЕТЫ:
+  • Автосервис ИТС
+    - Сохранён в: /root/horizon/its_report/src/preprocess_data/features/Автосервис ИТС_features.csv
+    - Количество строк: 2091
+    - Количество признаков: 42
+  • Мойка
+    - Сохранён в: /root/horizon/its_report/src/preprocess_data/features/Мойка_features.csv
+    - Количество строк: 2313
+    - Количество признаков: 41
+  • Шиномонтаж
+    - Сохранён в: /root/horizon/its_report/src/preprocess_data/features/Шиномонтаж_features.csv
+    - Количество строк: 2088
+    - Количество признаков: 41
+
+ СПИСОК СОЗДАННЫХ ПРИЗНАКОВ ПО КАТЕГОРИЯМ:
+
+Календарные признаки:
+  - dow
+  - dow_sin
+  - dow_cos
+  - month
+  - month_sin
+  - month_cos
+  - is_weekend
+  - is_friday
+  - is_monday
+  - is_peak_month
+
+Лаги и скользящие средние:
+  - lag_1
+  - lag_7
+  - lag_14
+  - lag_28
+  - lag_1_orders
+  - lag_7_orders
+  - lag_14_orders
+  - lag_28_orders
+  - ma7
+  - ma14
+  - ma28
+  - std7
+  - std14
+  - std28
+  - growth_wow_7
+
+STL-компоненты:
+  - stl_trend
+  - stl_seasonal
+  - stl_resid
+  - is_anomaly
+
+Взаимодействия:
+  - dow_x_month
+  - is_friday_dec
+  - is_friday_mar
+
+Бизнес-метрики:
+  - avg_check
+  - work_share
+  - parts_share
+
+============================================================
+Готово! Признаки сгенерированы.
+============================================================

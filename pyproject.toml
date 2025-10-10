@@ -1,14 +1,15 @@
 [project]
-name = "tool"
+name = "its_report"
 version = "0.1.0"
-description = "Tools for analysis time series data"
+description = "Default template for PDM package"
 authors = [
     {name = "Nikita Savvin", email = "savvin.nikit@yandex.ru"},
+    {name = "", email = ""},
 ]
 
 dependencies = [
     "numpy==1.26.4",
-    "pandas==2.2.1",
+    "pandas>=2.3.3",
     "plotly==5.20.0",
     "python-dotenv==1.0.1",
     "Requests==2.31.0",
@@ -29,20 +30,24 @@ dependencies = [
     "openpyxl>=3.1.5",
     "scikit-learn>=1.7.2",
     "tqdm>=4.67.1",
+    "synthcity[all]>=0.2.11",
+    "scipy==1.11.4",
+    "pydantic<2.0.0",
 ]
-requires-python = ">=3.10"
+requires-python = "==3.12.*"
 readme = "README.md"
 license = {text = "MIT"}
 
-[build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
-
 [tool.pdm]
-distribution = true
+distribution = false
 
 [tool.pdm.build]
 package-dir = "src"
+
+[[tool.pdm.source]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+verify_ssl = true
 
 
 [tool.pytest.ini_options]
