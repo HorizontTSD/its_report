@@ -33,7 +33,7 @@ def build_vectors(df, time_col, time_cols, target_col, lag_value, target_lag=Non
     return df
 
 
-def prepare_X_y_ml(df, time_col, target_col, time_lag, horizon):
+def prepare_X_y_ml(df, time_col, target_col, time_lag, horizon, val_frac=0.1, test_frac=0.1):
     df[time_col] = pd.to_datetime(df[time_col])
     df = df.sort_values(time_col, ascending=True).reset_index(drop=True)
     values_cols = [c for c in df.columns if c not in [time_col, target_col]]
@@ -57,7 +57,20 @@ def prepare_X_y_ml(df, time_col, target_col, time_lag, horizon):
             y_window = np.pad(y_window, (0, horizon - len(y_window)), constant_values=0.0)
         y_list.append(y_window)
 
-    return np.array(X_list, dtype=np.float32), np.array(y_list, dtype=np.float32)
+    X = np.array(X_list, dtype=np.float32)
+    y = np.array(y_list, dtype=np.float32)
+
+    n_samples = len(X)
+    n_test = int(n_samples * test_frac)
+    n_val = int(n_samples * val_frac)
+    n_train = n_samples - n_val - n_test
+
+    X_train, y_train = X[:n_train], y[:n_train]
+    X_val, y_val = X[n_train:n_train+n_val], y[n_train:n_train+n_val]
+    X_test, y_test = X[-n_test:], y[-n_test:]
+
+    return X_train, y_train, X_val, y_val, X_test, y_test
+
 
 
 def prepare_X_y_reg(df, time_col,  time_cols, target_col, lag):
@@ -95,10 +108,7 @@ if __name__ == "__main__":
     horizon = 360
 
     df = build_vectors(df=df_wash, time_col=time_col, time_cols=time_cols, target_col=target_col, lag_value=lag_value, target_lag=target_lag)
-    X_ml, y_ml = prepare_X_y_ml(df=df, time_col=time_col, target_col=target_col, time_lag=time_lag, horizon=horizon)
-
-    print("Форма X:", X_ml.shape)
-    print("Форма y:", y_ml.shape)
+    X_train, y_train, X_val, y_val, X_test, y_test = prepare_X_y_ml(df=df, time_col=time_col, target_col=target_col, time_lag=time_lag, horizon=horizon)
 
     print(df_wash.head())
 
