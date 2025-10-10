@@ -73,16 +73,28 @@ def prepare_X_y_ml(df, time_col, target_col, time_lag, horizon, val_frac=0.1, te
 
 
 
-def prepare_X_y_reg(df, time_col,  time_cols, target_col, lag):
+def prepare_X_y_reg(df, time_col, time_cols, target_col, lag, val_frac=0.1, test_frac=0.1):
     df[time_col] = pd.to_datetime(df[time_col])
     df = df.sort_values(time_col, ascending=True).reset_index(drop=True)
     df = df.copy()
     for i in range(1, lag + 1):
         df[f"{target_col}_lag_{i}"] = df[target_col].shift(i)
     df = df.dropna().reset_index(drop=True)
+
     X = df[time_cols + [f"{target_col}_lag_{i}" for i in range(lag, 0, -1)]].values
     y = df[target_col].values
-    return X, y
+
+    n_samples = len(X)
+    n_test = int(n_samples * test_frac)
+    n_val = int(n_samples * val_frac)
+    n_train = n_samples - n_val - n_test
+
+    X_train, y_train = X[:n_train], y[:n_train]
+    X_val, y_val = X[n_train:n_train+n_val], y[n_train:n_train+n_val]
+    X_test, y_test = X[-n_test:], y[-n_test:]
+
+    return X_train, y_train, X_val, y_val, X_test, y_test
+
 
 
 if __name__ == "__main__":
@@ -112,7 +124,7 @@ if __name__ == "__main__":
 
     print(df_wash.head())
 
-    X_reg, y_reg = prepare_X_y_reg(df=df_wash, time_col=time_col, time_cols=time_cols, target_col=target_col, lag=target_lag)
+    X_train, y_train, X_val, y_val, X_test, y_test = prepare_X_y_reg(df=df_wash, time_col=time_col, time_cols=time_cols, target_col=target_col, lag=target_lag)
 
     print(X_reg)
 
