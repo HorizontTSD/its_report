@@ -96,7 +96,6 @@ def prepare_X_y_reg(df, time_col, time_cols, target_col, lag, val_frac=0.1, test
     return X_train, y_train, X_val, y_val, X_test, y_test
 
 
-
 if __name__ == "__main__":
     import os
 

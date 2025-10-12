@@ -212,15 +212,12 @@ def get_realmeteo_daily(city_slug: str = "izhevsk",
     ]
     return daily
 
-df['date'] = pd.to_datetime(df['По дням']).dt.date
 
 # Скачиваем и готовим погодные фичи:
 daily_weather = get_realmeteo_daily(
-    city_slug="izhevsk", station_num=1, years=list(range(2020, 2026)),
+    city_slug="izhevsk", station_num=1, years=list(range(2019, 2026)),
     tz_local="Europe/Samara")
 
-# Джоин:
-df= df.merge(daily_weather, on="date", how="left")
 
 # One‑hot энкодинг
 def one_hot_encode(df: pd.DataFrame, cat_col: str) -> pd.DataFrame:
@@ -234,11 +231,15 @@ def label_encode(df: pd.DataFrame, cat_col: str) -> pd.DataFrame:
     df_copy[f"{cat_col}_encoded"], uniques = pd.factorize(df_copy[cat_col], sort=True)
     return df_copy
 
-# Пример вызова функции 
-# df = one_hot_encode(df, 'year') добавляет колонки year_2020, year_2021, year_2022	и т.д.
-# df = label_encode(df, 'year') добавляет колонку year_encoded
+# Пример вызова функции
+# df = one_hot_encode(df, 'year') # добавляет колонки year_2020, year_2021, year_2022	и т.д.
+# df = label_encode(df, 'year') # добавляет колонку year_encoded
 
 for k, df in result.items():
+    to_drop_cols = ["wind_speed_hi_max"]
     path = os.path.join(preprocess_data_path, f"{k}.csv")
+    df['date'] = pd.to_datetime(df['По дням']).dt.date
+    df = df.merge(daily_weather, on="date", how="left")
+    df = df.drop(columns=to_drop_cols)
     df.to_csv(path, index=False)
 
