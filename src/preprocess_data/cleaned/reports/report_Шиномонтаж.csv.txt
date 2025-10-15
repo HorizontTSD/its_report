@@ -1,0 +1,20 @@
+Отчёт по файлу: Шиномонтаж.csv
+==================================================
+- Обнаружены потенциальные выбросы (не удалены, только зафиксированы):
+    Количество заказ-нарядов: 28
+    Работ: 44
+    Запчастей: недостаточно данных
+    Всего по заказ-наряду: 44
+    temperature_mean: 63
+    pressure_mean: 63
+    humidity_mean: 61
+    wind_speed_avg_mean: 63
+    wind_speed_avg_max: 46
+    solar_rad_sum: 61
+    uv_max: 50
+    pcp_sum: 63
+- Заполнение пропусков: Интерполяция + FFill/BFill
+- Пропусков до: {'Количество заказ-нарядов': 642, 'Работ': 642, 'Запчастей': 2088, 'Всего по заказ-наряду': 642, 'temperature_mean': 0, 'pressure_mean': 0, 'humidity_mean': 0, 'wind_speed_avg_mean': 0, 'wind_speed_avg_max': 0, 'solar_rad_sum': 0, 'uv_max': 0, 'pcp_sum': 0}
+- Пропусков после: {'Количество заказ-нарядов': 0, 'Работ': 0, 'Запчастей': 0, 'Всего по заказ-наряду': 0, 'temperature_mean': 0, 'pressure_mean': 0, 'humidity_mean': 0, 'wind_speed_avg_mean': 0, 'wind_speed_avg_max': 0, 'solar_rad_sum': 0, 'uv_max': 0, 'pcp_sum': 0}
+
+Визуализация: preprocess_data/cleaned/plots/plot_Шиномонтаж.csv.html

@@ -1,0 +1,20 @@
+Отчёт по файлу: Автосервис.csv
+==================================================
+- Обнаружены потенциальные выбросы (не удалены, только зафиксированы):
+    Количество заказ-нарядов: недостаточно данных
+    Работ: недостаточно данных
+    Запчастей: недостаточно данных
+    Всего по заказ-наряду: недостаточно данных
+    temperature_mean: 6
+    pressure_mean: 6
+    humidity_mean: 6
+    wind_speed_avg_mean: 6
+    wind_speed_avg_max: 6
+    solar_rad_sum: 6
+    uv_max: 4
+    pcp_sum: 6
+- Заполнение пропусков: Интерполяция + FFill/BFill
+- Пропусков до: {'Количество заказ-нарядов': 173, 'Работ': 173, 'Запчастей': 184, 'Всего по заказ-наряду': 173, 'temperature_mean': 0, 'pressure_mean': 0, 'humidity_mean': 0, 'wind_speed_avg_mean': 0, 'wind_speed_avg_max': 0, 'solar_rad_sum': 0, 'uv_max': 0, 'pcp_sum': 0}
+- Пропусков после: {'Количество заказ-нарядов': 0, 'Работ': 0, 'Запчастей': 0, 'Всего по заказ-наряду': 0, 'temperature_mean': 0, 'pressure_mean': 0, 'humidity_mean': 0, 'wind_speed_avg_mean': 0, 'wind_speed_avg_max': 0, 'solar_rad_sum': 0, 'uv_max': 0, 'pcp_sum': 0}
+
+Визуализация: preprocess_data/cleaned/plots/plot_Автосервис.csv.html

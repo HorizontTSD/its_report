@@ -1,0 +1,21 @@
+Отчёт по файлу: Автосервис ИТС.csv
+==================================================
+- Удалено дубликатов по времени: 5
+- Обнаружены потенциальные выбросы (не удалены, только зафиксированы):
+    Количество заказ-нарядов: 59
+    Работ: 62
+    Запчастей: 59
+    Всего по заказ-наряду: 61
+    temperature_mean: 63
+    pressure_mean: 63
+    humidity_mean: 63
+    wind_speed_avg_mean: 63
+    wind_speed_avg_max: 46
+    solar_rad_sum: 63
+    uv_max: 62
+    pcp_sum: 61
+- Заполнение пропусков: Интерполяция + FFill/BFill
+- Пропусков до: {'Количество заказ-нарядов': 46, 'Работ': 50, 'Запчастей': 139, 'Всего по заказ-наряду': 50, 'temperature_mean': 0, 'pressure_mean': 0, 'humidity_mean': 0, 'wind_speed_avg_mean': 0, 'wind_speed_avg_max': 0, 'solar_rad_sum': 0, 'uv_max': 0, 'pcp_sum': 0}
+- Пропусков после: {'Количество заказ-нарядов': 0, 'Работ': 0, 'Запчастей': 0, 'Всего по заказ-наряду': 0, 'temperature_mean': 0, 'pressure_mean': 0, 'humidity_mean': 0, 'wind_speed_avg_mean': 0, 'wind_speed_avg_max': 0, 'solar_rad_sum': 0, 'uv_max': 0, 'pcp_sum': 0}
+
+Визуализация: preprocess_data/cleaned/plots/plot_Автосервис ИТС.csv.html
