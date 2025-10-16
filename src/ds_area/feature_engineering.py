@@ -49,7 +49,7 @@ def generate_features(df, target_col='Всего по заказ-наряду',
     
     # === 2. Лаги и скользящие средние ===
     for lag in [1, 7, 14, 28]:
-        df[f'lag_{lag}'] = df[target_col].shift(lag)
+        df[f'lag_{lag}'] = df[target_col].shift(lag)        
         df[f'lag_{lag}_orders'] = df[orders_col].shift(lag)
     
     for window in [7, 14, 28]:

@@ -2,11 +2,8 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
-import pandas as pd
-import numpy as np
 from xgboost import XGBRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-import numpy as np
 
 
 def build_vectors(df, time_col, time_cols, target_col, lag_value, target_lag=None):
@@ -168,9 +165,6 @@ def prepare_X_y_reg_df(df, time_col, time_cols, target_col, lag):
     return df[cols]
 
 
-import pandas as pd
-import numpy as np
-
 def recursive_forecast(model, df, time_col, time_cols, target_col, lag, horizon):
     df = df.sort_values(time_col).copy().reset_index(drop=True)
     df = df.copy()
@@ -280,9 +274,3 @@ if __name__ == "__main__":
     print("MAPE:", np.mean(np.abs((np.array(y_true) - np.array(y_pred)) / np.array(y_true))) * 100)
 
     # print(df_test.head)
-
-
-
-
-
-

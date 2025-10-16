@@ -1,21 +1,21 @@
 ============================================================
 ОТЧЁТ ПО ГЕНЕРАЦИИ ПРИЗНАКОВ (FEATURE ENGINEERING)
 ============================================================
-Дата и время запуска: 2025-10-12 16:31:58
-Папка с исходными данными: /Users/nikitasavvin/Desktop/Business/repo/its_report/src/preprocess_data/cleaned
-Папка с результатами: /Users/nikitasavvin/Desktop/Business/repo/its_report/src/preprocess_data/features
+Дата и время запуска: 2025-10-16 15:17:44
+Папка с исходными данными: /root/horizon/its_report/src/preprocess_data/cleaned
+Папка с результатами: /root/horizon/its_report/src/preprocess_data/features
 
  УСПЕШНО ОБРАБОТАНЫЕ ДАТАСЕТЫ:
   • Автосервис ИТС
-    - Сохранён в: /Users/nikitasavvin/Desktop/Business/repo/its_report/src/preprocess_data/features/Автосервис ИТС_features.csv
+    - Сохранён в: /root/horizon/its_report/src/preprocess_data/features/Автосервис ИТС_features.csv
     - Количество строк: 2091
     - Количество признаков: 50
   • Мойка
-    - Сохранён в: /Users/nikitasavvin/Desktop/Business/repo/its_report/src/preprocess_data/features/Мойка_features.csv
+    - Сохранён в: /root/horizon/its_report/src/preprocess_data/features/Мойка_features.csv
     - Количество строк: 2313
     - Количество признаков: 49
   • Шиномонтаж
-    - Сохранён в: /Users/nikitasavvin/Desktop/Business/repo/its_report/src/preprocess_data/features/Шиномонтаж_features.csv
+    - Сохранён в: /root/horizon/its_report/src/preprocess_data/features/Шиномонтаж_features.csv
     - Количество строк: 2088
     - Количество признаков: 49
 
