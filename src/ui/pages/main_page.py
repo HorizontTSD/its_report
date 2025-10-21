@@ -4,15 +4,23 @@ import streamlit as st
 from ui.utils.greating import greatings
 
 from ui.utils.data_processing import check_authentication
+from markdown_content import intnrodaction
 
+
+hide_sidebar = """
+    <style>
+    [data-testid="stSidebar"] {display: none;}
+    [data-testid="stSidebarNav"] {display: none;}
+    [data-testid="collapsedControl"] {display: none;}
+    </style>
+    """
+st.markdown(hide_sidebar, unsafe_allow_html=True)
 
 @check_authentication
 async def main():
-    st.sidebar.write('# Здесь будут всякие параметры')
 
-    if st.button('Скажи привет!'):
-        greatings()
-        st.sidebar.write('## Привет Саша')
+    st.set_page_config(layout="wide")
+    st.markdown(intnrodaction)
 
 
 if __name__ == "__main__":
